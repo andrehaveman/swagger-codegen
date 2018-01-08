@@ -17,6 +17,7 @@ public class TypeScriptAngularClientOptionsProvider implements OptionsProvider {
     private static final String NPM_REPOSITORY = "https://registry.npmjs.org";
     public static final String ALLOW_UNICODE_IDENTIFIERS_VALUE = "false";
     public static final String NG_VERSION = "2";
+    public static final String API_NAME_SUFFIX = "Service";
 
 
     @Override
@@ -37,6 +38,7 @@ public class TypeScriptAngularClientOptionsProvider implements OptionsProvider {
                 .put(TypeScriptAngularClientCodegen.WITH_INTERFACES, Boolean.FALSE.toString())
                 .put(TypeScriptAngularClientCodegen.NPM_REPOSITORY, NPM_REPOSITORY)
                 .put(TypeScriptAngularClientCodegen.NG_VERSION, NG_VERSION)
+                .put(TypeScriptAngularClientCodegen.API_NAME_SUFFIX, API_NAME_SUFFIX)
                 .put(CodegenConstants.ALLOW_UNICODE_IDENTIFIERS, ALLOW_UNICODE_IDENTIFIERS_VALUE)
                 .build();
     }

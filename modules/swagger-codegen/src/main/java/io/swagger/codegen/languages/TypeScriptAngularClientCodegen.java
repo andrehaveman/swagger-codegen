@@ -33,10 +33,12 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
     public static final String SNAPSHOT = "snapshot";
     public static final String WITH_INTERFACES = "withInterfaces";
     public static final String NG_VERSION = "ngVersion";
+    public static final String API_NAME_SUFFIX = "apiNameSuffix";
 
     protected String npmName = null;
     protected String npmVersion = "1.0.0";
     protected String npmRepository = null;
+    protected String apiNameSuffix = "Service";
 
     public TypeScriptAngularClientCodegen() {
         super();
@@ -61,6 +63,7 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
                 "Setting this property to true will generate interfaces next to the default class implementations.",
                 BooleanProperty.TYPE).defaultValue(Boolean.FALSE.toString()));
         this.cliOptions.add(new CliOption(NG_VERSION, "The version of Angular. Default is '4.3'"));
+        this.cliOptions.add(new CliOption(API_NAME_SUFFIX, "The suffix used for api class names. Default is 'Service'"));
     }
 
     @Override
@@ -103,6 +106,10 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
             if (withInterfaces) {
                 apiTemplateFiles.put("apiInterface.mustache", "Interface.ts");
             }
+        }
+
+        if (additionalProperties.containsKey(API_NAME_SUFFIX)) {
+            setApiNameSuffix(additionalProperties.get(API_NAME_SUFFIX).toString());
         }
 
         // determine NG version
@@ -335,9 +342,9 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
     @Override
     public String toApiName(String name) {
         if (name.length() == 0) {
-            return "DefaultService";
+            return "Default" + apiNameSuffix;
         }
-        return initialCaps(name) + "Service";
+        return initialCaps(name) + apiNameSuffix;
     }
 
     @Override
@@ -379,6 +386,14 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
         this.npmVersion = npmVersion;
     }
 
+    public String getApiNameSuffix() {
+        return apiNameSuffix;
+    }
+
+    public void setApiNameSuffix(String apiNameSuffix) {
+        this.apiNameSuffix = apiNameSuffix;
+    }
+
     public String getNpmRepository() {
         return npmRepository;
     }
@@ -388,7 +403,7 @@ public class TypeScriptAngularClientCodegen extends AbstractTypeScriptClientCode
     }
 
     private String getApiFilenameFromClassname(String classname) {
-        String name = classname.substring(0, classname.length() - "Service".length());
+        String name = classname.substring(0, classname.length() - apiNameSuffix.length());
         return toApiFilename(name);
     }
 
